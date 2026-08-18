@@ -10,3 +10,4 @@ router.put("/:id", VehiclesController.updateVehicle);
 router.delete("/:id", VehiclesController.deleteVehicle);
 
 export const VehiclesRoutes = router;
+ 

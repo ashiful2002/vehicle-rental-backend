@@ -2,19 +2,52 @@ import {
   Vehicle,
   CreateVehicleInput,
   UpdateVehicleInput,
+  VehicleCategory,
 } from "./vehicles.interface";
 import { db } from "../../config/database.ts";
 import AppError from "../../errorHelpers/AppError.ts";
 import status from "http-status";
 
 const getAllVehicles = async ({
-  query,
+  query, 
 }: {
   query: Record<string, unknown>;
 }) => {
-  const result = await db("vehicles").whereNull("deleted_at").select("*");
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+  const offset = (page - 1) * limit;
 
-  return result;
+  const search = query.search as string | undefined;
+  const category = query.category as VehicleCategory | undefined;
+
+  const baseQuery = db("vehicles").whereNull("deleted_at");
+
+  if (search) {
+    baseQuery.whereILike("name", `%${search}%`);
+  }
+  if (category) {
+    baseQuery.where("category", category);
+  }
+  // Total number of matching vehicles
+  const [{ count }] = await baseQuery.clone().count("* as count");
+
+  // Paginated vehicles
+  const vehicles = await baseQuery
+    .clone()
+    .select("*")
+    .limit(limit)
+    .offset(offset)
+    .orderBy("created_at", "desc");
+
+  return {
+    meta: {
+      page,
+      limit,
+      total: Number(count),
+      totalPages: Math.ceil(Number(count) / limit),
+    },
+    data: vehicles,
+  };
 };
 
 const getVehicleById = async (id: string) => {
