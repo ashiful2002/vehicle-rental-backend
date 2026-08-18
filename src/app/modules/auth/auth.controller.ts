@@ -1,55 +1,60 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import { AuthService } from "./auth.service";
+import { Request, Response } from "express";
+import status from "http-status";
+import AuthService from "./auth.service";
 import { sendResponse } from "../../shared/sendResponse";
 import { catchAsync } from "../../shared/catchAsync";
-import status from "http-status";
 
-const createUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.createUser(req.body);
-  sendResponse(res, {
-    httpStatusCode: status.CREATED,
-    success: true,
-    message: "User created successfully",
-    data: result,
-  });
-});
+class AuthController {
+  private authService: AuthService;
 
-const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body;
-  const result = await AuthService.loginUser(payload);
+  constructor(authService: AuthService) {
+    this.authService = authService;
+  }
 
-  res.cookie("access_token", result.token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000,
+  // arrow function class fields keep `this` bound correctly
+  // when Express calls these as plain callbacks
+  
+  createUser = catchAsync(async (req: Request, res: Response) => {
+    const result = await this.authService.createUser(req.body);
+    sendResponse(res, {
+      httpStatusCode: status.CREATED,
+      success: true,
+      message: "User created successfully",
+      data: result,
+    });
   });
 
-  sendResponse(res, {
-    httpStatusCode: status.OK,
-    success: true,
-    message: "User logged in successfull",
-    data: result.user,
-  });
-});
+  loginUser = catchAsync(async (req: Request, res: Response) => {
+    const result = await this.authService.loginUser(req.body);
 
-const logoutUser = catchAsync(async (req: Request, res: Response) => {
-  res.clearCookie("access_token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
-  // const result = await AuthService.logoutUser();
-  sendResponse(res, {
-    httpStatusCode: status.OK,
-    success: true,
-    message: "User log out successfully",
-    data: null,
-  });
-});
+    res.cookie("access_token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
-export const AuthController = {
-  createUser,
-  loginUser,
-  logoutUser,
-};
+    sendResponse(res, {
+      httpStatusCode: status.OK,
+      success: true,
+      message: "User logged in successfully",
+      data: result.user,
+    });
+  });
+
+  logoutUser = catchAsync(async (_req: Request, res: Response) => {
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    sendResponse(res, {
+      httpStatusCode: status.OK,
+      success: true,
+      message: "User logged out successfully",
+      data: null,
+    });
+  });
+}
+
+export default AuthController;

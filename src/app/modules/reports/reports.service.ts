@@ -36,7 +36,7 @@ class ReportService {
 
     let vehicleFilter = "";
     // bindings order MUST match the order "?" appears in the SQL below
-    const bindings: unknown[] = [
+    const bindings: (string | number)[] = [
       monthEnd,
       monthStart,
       monthEnd,

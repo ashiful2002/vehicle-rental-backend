@@ -6,10 +6,8 @@ const server = http.createServer(app);
 
 async function main() {
   try {
-    // await seedSuperAdmin();
-
-    app.listen(5100, () => {
-      console.log(`Server running on http://localhost:5100`);
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on http://localhost:${process.env.PORT}`);
     });
   } catch (err) {
     console.error(err);

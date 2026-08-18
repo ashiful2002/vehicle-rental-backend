@@ -1,7 +1,7 @@
-import { db } from "../../config/database.ts";
-import AppError from "../../errorHelpers/AppError.ts";
+import { db } from "../../config/database";
+import AppError from "../../errorHelpers/AppError";
 import status from "http-status";
-import { CreateRentalInput, UpdateRentalInput } from "./rentals.interface.ts";
+import { CreateRentalInput, UpdateRentalInput } from "./rentals.interface";
 
 const getAllRentals = async ({ query }: { query: Record<string, unknown> }) => {
   const page = Number(query.page) || 1;

@@ -13,5 +13,6 @@ const routerManager = [
   { path: "/reports", route: ReportRoutes },
 ];
 
+
 routerManager.forEach((r) => router.use(r.path, r.route));
 export default router;

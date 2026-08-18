@@ -4,12 +4,12 @@ import {
   UpdateVehicleInput,
   VehicleCategory,
 } from "./vehicles.interface";
-import { db } from "../../config/database.ts";
-import AppError from "../../errorHelpers/AppError.ts";
+import { db } from "../../config/database";
+import AppError from "../../errorHelpers/AppError";
 import status from "http-status";
 
 const getAllVehicles = async ({
-  query, 
+  query,
 }: {
   query: Record<string, unknown>;
 }) => {

@@ -1,11 +1,16 @@
 import express from "express";
-import { AuthController } from "./auth.controller";
-import auth from "../../middlewares/auth";
+import { db } from "../../config/database";
+import AuthService from "./auth.service";
+import AuthController from "./auth.controller";
 
 const router = express.Router();
 
-router.post("/register", AuthController.createUser);
-router.post("/login", AuthController.loginUser);
-router.post("/logout", AuthController.logoutUser);
+// composition root: create instances and wire them here
+const authService = new AuthService(db);
+const authController = new AuthController(authService);
+
+router.post("/register", authController.createUser);
+router.post("/login", authController.loginUser);
+router.post("/logout", authController.logoutUser);
 
 export const AuthRoutes = router;

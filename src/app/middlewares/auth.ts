@@ -23,8 +23,9 @@ const auth = (...roles: any[]) => {
       const decoded = jwt.verify(token, "sadf") as JwtPayload;
 
       const userData = await {
+        id: decoded.id,
         email: decoded.email,
-        role: decoded.role,
+        // role: decoded.role,
       };
 
       if (!userData) {
@@ -44,7 +45,7 @@ const auth = (...roles: any[]) => {
       req.user = {
         id: userData.id,
         email: userData.email,
-        role: userData.role,
+        // role: userData.role,
       };
       next();
     } catch (error) {

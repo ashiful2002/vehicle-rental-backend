@@ -13,16 +13,14 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
- 
 
-app.use("/api/v1/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 
 // application routes
 app.use("/api/v1", router);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("MMDB movie rateing platform");
+  res.send("Vehicle Rental Backend");
 });
 
 app.use(notFound);
