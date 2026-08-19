@@ -1,5 +1,6 @@
 import { Knex } from "knex";
 import status from "http-status";
+
 import AppError from "../../errorHelpers/AppError";
 import { RentalReportResult, VehicleReport } from "./reports.interface";
 
@@ -35,7 +36,7 @@ class ReportService {
     const { monthStart, monthEnd } = this.getMonthBoundaries(month);
 
     let vehicleFilter = "";
-    // bindings order MUST match the order "?" appears in the SQL below
+
     const bindings: (string | number)[] = [
       monthEnd,
       monthStart,
@@ -57,9 +58,9 @@ class ReportService {
         COUNT(r.id)::int AS total_bookings,
         SUM(LEAST(r.end_date, ?::date) - GREATEST(r.start_date, ?::date) + 1)::int AS days_rented,
         SUM((LEAST(r.end_date, ?::date) - GREATEST(r.start_date, ?::date) + 1) * v.daily_rate)::numeric AS revenue
-      FROM rentals r
-      JOIN vehicles v ON v.id = r.vehicle_id
-      WHERE r.start_date <= ?::date
+        FROM rentals r
+        JOIN vehicles v ON v.id = r.vehicle_id
+        WHERE r.start_date <= ?::date
         AND r.end_date >= ?::date
         AND r.status != 'cancelled'
         ${vehicleFilter}
@@ -77,7 +78,6 @@ class ReportService {
       revenue: Number(row.revenue),
     }));
 
-    // already sorted by revenue DESC, so first row is the top vehicle
     const topVehicle = vehicles.length > 0 ? vehicles[0] : null;
 
     return { month, vehicles, top_vehicle: topVehicle };

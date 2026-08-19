@@ -4,6 +4,27 @@ import { sendResponse } from "../../shared/sendResponse";
 import { Request, Response } from "express";
 import { VehiclesServices } from "./vehicles.service";
 
+const createNewVehicle = catchAsync(async (req: Request, res: Response) => {
+  const body = req.body;
+  console.log(body);
+  console.log(req.file?.path);
+
+  const payload = {
+    ...req.body,
+    photo_path: req.file?.path,
+  };
+  console.log(payload);
+
+  const result = await VehiclesServices.createNewVehicles(payload);
+
+  sendResponse(res, {
+    httpStatusCode: status.CREATED,
+    success: true,
+    message: "Vehicle created successfully",
+    data: result,
+  });
+});
+
 const getAllVehicles = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
   const result = await VehiclesServices.getAllVehicles({ query });
@@ -25,18 +46,6 @@ const getVehicleById = catchAsync(async (req: Request, res: Response) => {
     httpStatusCode: status.OK,
     success: true,
     message: "Get vehicle by id successfully",
-    data: result,
-  });
-});
-
-const createNewVehicle = catchAsync(async (req: Request, res: Response) => {
-  const body = req.body;
-  const result = await VehiclesServices.createNewVehicles({ body });
-
-  sendResponse(res, {
-    httpStatusCode: status.CREATED,
-    success: true,
-    message: "Vehicle created successfully",
     data: result,
   });
 });
@@ -71,9 +80,9 @@ const deleteVehicle = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const VehiclesController = {
+  createNewVehicle,
   getAllVehicles,
   getVehicleById,
-  createNewVehicle,
   updateVehicle,
   deleteVehicle,
 };

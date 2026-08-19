@@ -11,3 +11,4 @@ const reportController = new ReportController(reportService);
 router.get("/rentals", reportController.getRentalReport);
 
 export const ReportRoutes = router;
+ 

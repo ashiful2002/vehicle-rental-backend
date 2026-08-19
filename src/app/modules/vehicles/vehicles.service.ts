@@ -1,12 +1,45 @@
+import status from "http-status";
+import { db } from "../../config/database";
 import {
   Vehicle,
   CreateVehicleInput,
   UpdateVehicleInput,
   VehicleCategory,
 } from "./vehicles.interface";
-import { db } from "../../config/database";
 import AppError from "../../errorHelpers/AppError";
-import status from "http-status";
+
+const createNewVehicles = async (body: CreateVehicleInput) => {
+  const existingVehicle = await db("vehicles")
+    .where("plate_number", body.plate_number)
+    .first();
+
+  if (existingVehicle) {
+    throw new AppError(
+      status.CONFLICT,
+      "A vehicle with this plate number already exists"
+    );
+  }
+
+  const [newVehicle] = await db("vehicles")
+    .insert({
+      name: body.name,
+      plate_number: body.plate_number,
+      category: body.category,
+      daily_rate: body.daily_rate,
+      photo_path: body.photo_path ?? null,
+    })
+    .returning([
+      "id",
+      "name",
+      "plate_number",
+      "category",
+      "daily_rate",
+      "photo_path",
+      "deleted_at",
+      "updated_at",
+    ]);
+  return newVehicle;
+};
 
 const getAllVehicles = async ({
   query,
@@ -59,27 +92,6 @@ const getVehicleById = async (id: string) => {
     .first();
 
   return result;
-};
-const createNewVehicles = async ({ body }: { body: CreateVehicleInput }) => {
-  const [newVehicle] = await db("vehicles")
-    .insert({
-      name: body.name,
-      plate_number: body.plate_number,
-      category: body.category,
-      daily_rate: body.daily_rate,
-      photo_path: body.photo_path ?? null,
-    })
-    .returning([
-      "id",
-      "name",
-      "plate_number",
-      "category",
-      "daily_rate",
-      "photo_path",
-      "deleted_at",
-      "updated_at",
-    ]);
-  return newVehicle;
 };
 
 const updateVehicle = async ({
@@ -141,9 +153,9 @@ const deleteVehicle = async (id: string) => {
 };
 
 export const VehiclesServices = {
+  createNewVehicles,
   getAllVehicles,
   getVehicleById,
-  createNewVehicles,
   updateVehicle,
   deleteVehicle,
 };

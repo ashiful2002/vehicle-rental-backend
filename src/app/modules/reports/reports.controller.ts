@@ -17,7 +17,7 @@ class ReportController {
       month as string,
       vehicle_id ? Number(vehicle_id) : undefined
     );
-
+ 
     res.status(200).json({
       success: true,
       message: "Rental report retrieved successfully",
