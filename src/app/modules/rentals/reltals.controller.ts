@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import status from "http-status";
+import { Request, Response } from 'express';
+import status from 'http-status';
 
-import { catchAsync } from "../../shared/catchAsync";
-import { sendResponse } from "../../shared/sendResponse";
-import { RentalServices } from "./reltals.service";
+import { catchAsync } from '../../shared/catchAsync';
+import { sendResponse } from '../../shared/sendResponse';
+import { RentalServices } from './reltals.service';
 
 const getAllRentals = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
@@ -12,7 +12,7 @@ const getAllRentals = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     httpStatusCode: status.OK,
     success: true,
-    message: "Get all Rentals successfully",
+    message: 'Get all Rentals successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -25,7 +25,7 @@ const getRentalById = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     httpStatusCode: status.OK,
     success: true,
-    message: "Get Rental by id successfully",
+    message: 'Get Rental by id successfully',
     data: result,
   });
 });
@@ -37,7 +37,7 @@ const createRental = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     httpStatusCode: status.CREATED,
     success: true,
-    message: "Rental created successfully",
+    message: 'Rental created successfully',
     data: result,
   });
 });
@@ -54,7 +54,7 @@ const updateRentals = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     httpStatusCode: status.OK,
     success: true,
-    message: "Vehicle updated successfully",
+    message: 'Vehicle updated successfully',
     data: result,
   });
 });
@@ -66,7 +66,7 @@ const deleteRentals = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     httpStatusCode: status.OK,
     success: true,
-    message: "Vehicle deleted successfully",
+    message: 'Vehicle deleted successfully',
     data: result,
   });
 });

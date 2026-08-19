@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { NextFunction, Request, Response } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const auth = (...roles: any[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.method === "OPTIONS") {
+      if (req.method === 'OPTIONS') {
         return next();
       }
       const authHeader = req.headers.authorization;
@@ -12,15 +12,15 @@ const auth = (...roles: any[]) => {
       if (!authHeader) {
         return res.status(401).json({
           success: false,
-          message: "Unauthorized access. Token not found",
+          message: 'Unauthorized access. Token not found',
         });
       }
 
-      const token = authHeader.startsWith("Bearer ")
-        ? authHeader.split(" ")[1]
+      const token = authHeader.startsWith('Bearer ')
+        ? authHeader.split(' ')[1]
         : authHeader;
 
-      const decoded = jwt.verify(token, "sadf") as JwtPayload;
+      const decoded = jwt.verify(token, 'sadf') as JwtPayload;
 
       const userData = await {
         id: decoded.id,
@@ -31,14 +31,14 @@ const auth = (...roles: any[]) => {
       if (!userData) {
         return res.status(401).json({
           success: false,
-          message: "User not found",
+          message: 'User not found',
         });
       }
 
       if (roles.length && !roles.includes(decoded.role)) {
         return res.status(403).json({
           success: false,
-          message: "Forbidden! You are not authorized",
+          message: 'Forbidden! You are not authorized',
         });
       }
 

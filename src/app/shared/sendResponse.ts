@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 interface IResponseData<T> {
   httpStatusCode: number;
@@ -15,7 +15,7 @@ interface IResponseData<T> {
 
 export const sendResponse = <T>(
   res: Response,
-  responseData: IResponseData<T>
+  responseData: IResponseData<T>,
 ) => {
   const { httpStatusCode, success, message, data, meta } = responseData;
 

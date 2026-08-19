@@ -1,20 +1,55 @@
-import { NextFunction, Request, Response } from "express";
-import z from "zod";
+import { Request, Response, NextFunction } from "express";
+import Joi from "joi";
+import status from "http-status";
+import AppError from "../errorHelpers/AppError";
 
-export const validateRequest = (zodSchema: z.ZodObject) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.data) {
-      req.body = JSON.parse(req.body.data);
+export const validateRequest = (schema: Joi.ObjectSchema) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
+    try {
+      // If data is sent as a stringified JSON inside req.body.data, parse it
+      let payload = req.body;
+      if (req.body && typeof req.body.data === "string") {
+        try {
+          payload = JSON.parse(req.body.data);
+        } catch {
+          // fallback if parsing fails
+        }
+      }
+
+      const validatedData = await schema.validateAsync(payload, {
+        abortEarly: false,
+        stripUnknown: true,
+        convert: true,
+      });
+
+      req.body = validatedData;
+      next();
+    } catch (error: any) {
+      const errorMessage = error.details
+        ? error.details.map((d: any) => d.message).join(", ")
+        : error.message;
+
+      next(new AppError(status.BAD_REQUEST, errorMessage));
     }
-
-    const parsedResult = zodSchema.safeParse(req.body);
-
-    if (!parsedResult.success) {
-      return next(parsedResult.error);
-    }
-
-    req.body = parsedResult.data;
-
-    next();
   };
 };
+// import { NextFunction, Request, Response } from 'express';
+// import z from 'zod';
+
+// export const validateRequest = (zodSchema: z.ZodObject) => {
+//   return (req: Request, res: Response, next: NextFunction) => {
+//     if (req.body.data) {
+//       req.body = JSON.parse(req.body.data);
+//     }
+
+//     const parsedResult = zodSchema.safeParse(req.body);
+
+//     if (!parsedResult.success) {
+//       return next(parsedResult.error);
+//     }
+
+//     req.body = parsedResult.data;
+
+//     next();
+//   };
+// };

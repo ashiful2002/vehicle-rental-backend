@@ -1,4 +1,4 @@
-export type RentalStatus = "booked" | "ongoing" | "completed" | "cancelled";
+export type RentalStatus = 'booked' | 'ongoing' | 'completed' | 'cancelled';
 
 export interface Rental {
   id: number;

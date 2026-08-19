@@ -1,7 +1,7 @@
-import express from "express";
-import { db } from "../../config/database";
-import AuthService from "./auth.service";
-import AuthController from "./auth.controller";
+import express from 'express';
+import { db } from '../../config/database';
+import AuthService from './auth.service';
+import AuthController from './auth.controller';
 
 const router = express.Router();
 
@@ -9,8 +9,8 @@ const router = express.Router();
 const authService = new AuthService(db);
 const authController = new AuthController(authService);
 
-router.post("/register", authController.createUser);
-router.post("/login", authController.loginUser);
-router.post("/logout", authController.logoutUser);
+router.post('/register', authController.createUser);
+router.post('/login', authController.loginUser);
+router.post('/logout', authController.logoutUser);
 
 export const AuthRoutes = router;

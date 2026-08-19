@@ -1,9 +1,9 @@
-require("dotenv").config();
+require('dotenv').config();
 
 /** @type {import("knex").Knex.Config} */
 const config = {
   development: {
-    client: "pg",
+    client: 'pg',
 
     connection: {
       connectionString: process.env.DATABASE_URL,
@@ -11,8 +11,8 @@ const config = {
     },
 
     migrations: {
-      directory: "./src/db/migrations",
-      tableName: "knex_migrations",
+      directory: './src/db/migrations',
+      tableName: 'knex_migrations',
     },
 
     pool: {
@@ -22,7 +22,7 @@ const config = {
   },
 
   production: {
-    client: "pg",
+    client: 'pg',
 
     connection: {
       connectionString: process.env.DATABASE_URL,
@@ -32,8 +32,8 @@ const config = {
     },
 
     migrations: {
-      directory: "./src/db/migrations",
-      tableName: "knex_migrations",
+      directory: './src/db/migrations',
+      tableName: 'knex_migrations',
     },
 
     pool: {

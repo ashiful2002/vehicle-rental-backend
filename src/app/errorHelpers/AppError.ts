@@ -1,7 +1,7 @@
 class AppError extends Error {
   public httpStatusCode: number;
 
-  constructor(statsCode: number, message: string, stack = "") {
+  constructor(statsCode: number, message: string, stack = '') {
     super(message);
     this.httpStatusCode = statsCode;
 

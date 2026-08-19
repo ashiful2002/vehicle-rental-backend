@@ -1,4 +1,4 @@
-export type VehicleCategory = "sedan" | "suv" | "van" | "truck";
+export type VehicleCategory = 'sedan' | 'suv' | 'van' | 'truck';
 
 export interface Vehicle {
   id: number;
