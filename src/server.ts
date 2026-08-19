@@ -1,8 +1,4 @@
-import http from 'http';
-
-import app from './app';
-
-const server = http.createServer(app);
+import app from "./app";
 
 async function main() {
   try {

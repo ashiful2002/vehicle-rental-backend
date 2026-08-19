@@ -6,8 +6,10 @@ import {
   createVehicleJoiSchema,
   updateVehicleJoiSchema,
 } from "./vehicles.validation";
+import auth from "../../middlewares/auth";
 
 const router = express.Router();
+router.use(auth);
 
 router.post(
   "/",
@@ -19,6 +21,7 @@ router.get("/", VehiclesController.getAllVehicles);
 router.get("/:id", VehiclesController.getVehicleById);
 router.put(
   "/:id",
+  multerUpload.single("file"),
   validateRequest(updateVehicleJoiSchema),
   VehiclesController.updateVehicle,
 );
