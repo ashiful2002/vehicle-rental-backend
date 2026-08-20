@@ -9,6 +9,12 @@ The project is built with **Node.js, Express.js, TypeScript, PostgreSQL, and Kne
 **Base URL:**  
 https://vehicle-rental-backend-opal.vercel.app
 
+Optional Frontend Demo
+
+A simple frontend UI was created separately to demonstrate and test the backend API.
+This frontend is optional and is not part of the core backend implementation.
+
+Live Demo: [vehicle rental front end](https://vehicle-management-front-end-three.vercel.app)
 ---
 
 ## 🛠 Tech Stack
@@ -223,7 +229,7 @@ Verify Email & Password
         ↓
 Generate JWT
         ↓
-Authorization: 
+Authorization:
         ↓
 Protected API Routes
 ```

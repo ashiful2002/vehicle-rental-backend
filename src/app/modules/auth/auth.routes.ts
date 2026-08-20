@@ -10,11 +10,11 @@ const router = express.Router();
 const authService = new AuthService(db);
 const authController = new AuthController(authService);
 
-router.post(
-  '/register',
-  validateRequest(registerJoiSchema),
-  authController.createUser,
-);
+// router.post(
+//   '/register',
+//   validateRequest(registerJoiSchema),
+//   authController.createUser,
+// );
 router.post(
   '/login',
   validateRequest(loginJoiSchema),
