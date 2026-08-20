@@ -1,14 +1,16 @@
 import express from "express";
-import { VehiclesController } from "./vehicles.controller";
+
+import auth from "../../middlewares/auth";
 import { multerUpload } from "../../config/multer.config";
 import { validateRequest } from "../../middlewares/validateRequest";
 import {
   createVehicleJoiSchema,
   updateVehicleJoiSchema,
 } from "./vehicles.validation";
-import auth from "../../middlewares/auth";
+import { VehiclesController } from "./vehicles.controller";
 
 const router = express.Router();
+
 router.use(auth);
 
 router.post(

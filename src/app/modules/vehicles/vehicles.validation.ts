@@ -7,7 +7,7 @@ export const createVehicleJoiSchema = Joi.object({
     "any.required": "Vehicle name is required",
   }),
 
-  plate_number: Joi.string().min(3).max(20).required().messages({
+  plate_number: Joi.string().min(3).max(50).required().messages({
     "string.min": "Plate number is required",
     "string.max": "Plate number cannot exceed 20 characters",
     "any.required": "Plate number is required",
