@@ -15,7 +15,7 @@ class AuthService {
     this.jwtSecret = process.env.JWT_SECRET || "jwt-secret-key";
     this.jwtExpiresIn = 24 * 60 * 60; // 1 day, in seconds
   }
-
+ 
   async createUser(payload: IRegisterPayload) {
     const { name, email, password } = payload;
 

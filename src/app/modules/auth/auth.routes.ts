@@ -4,8 +4,7 @@ import AuthService from "./auth.service";
 import AuthController from "./auth.controller";
 import { loginJoiSchema, registerJoiSchema } from "./auth.validation";
 import { validateRequest } from "../../middlewares/validateRequest";
-import auth from "../../middlewares/auth";
-
+ 
 const router = express.Router();
 
 const authService = new AuthService(db);
