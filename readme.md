@@ -7,7 +7,7 @@ The project is built with **Node.js, Express.js, TypeScript, PostgreSQL, and Kne
 ## 🚀 Live Demo
 
 **Base URL:**  
-https://vehicle-rental-backend-opal.vercel.app/api/v1
+https://vehicle-rental-backend-opal.vercel.app
 
 ---
 
