@@ -1,7 +1,7 @@
-import { db } from '../../config/database';
-import AppError from '../../errorHelpers/AppError';
-import status from 'http-status';
-import { CreateRentalInput, UpdateRentalInput } from './rentals.interface';
+import { db } from "../../config/database";
+import AppError from "../../errorHelpers/AppError";
+import status from "http-status";
+import { CreateRentalInput, UpdateRentalInput } from "./rentals.interface";
 
 class rentalService {
   createRental = async ({ body }: { body: CreateRentalInput }) => {
@@ -14,33 +14,33 @@ class rentalService {
     if (startDate > endDate) {
       throw new AppError(
         status.BAD_REQUEST,
-        'End Date Must be after start date',
+        "End Date Must be after start date",
       );
     }
 
     // if vehicle exists
-    const vehicle = await db('vehicles')
+    const vehicle = await db("vehicles")
       .where({
         id: vehicle_id,
       })
-      .whereNull('deleted_at')
+      .whereNull("deleted_at")
       .first();
 
     if (!vehicle) {
-      throw new AppError(status.NOT_FOUND, 'Vehicle not found');
+      throw new AppError(status.NOT_FOUND, "Vehicle not found");
     }
     // free rental check
-    const existingRental = await db('rentals')
-      .where('vehicle_id', vehicle_id)
-      .whereIn('status', ['booked', 'ongoing'])
-      .where('start_date', '<=', end_date)
-      .where('end_date', '>=', start_date)
+    const existingRental = await db("rentals")
+      .where("vehicle_id", vehicle_id)
+      .whereIn("status", ["booked", "ongoing"])
+      .where("start_date", "<=", end_date)
+      .where("end_date", ">=", start_date)
       .first();
 
     if (existingRental) {
       throw new AppError(
         status.CONFLICT,
-        'Vehicle is already rented for the selected dates',
+        "Vehicle is already rented for the selected dates",
       );
     }
 
@@ -56,7 +56,7 @@ class rentalService {
 
     const totalAmount = Number(vehicle.daily_rate) * rentalDays;
     // create new rentals
-    const [newRental] = await db('rentals')
+    const [newRental] = await db("rentals")
       .insert({
         vehicle_id,
         customer_name,
@@ -64,9 +64,9 @@ class rentalService {
         start_date,
         end_date,
         total_amount: totalAmount,
-        status: 'booked',
+        status: "booked",
       })
-      .returning('*');
+      .returning("*");
     return newRental;
   };
   getAllRentals = async ({ query }: { query: Record<string, unknown> }) => {
@@ -82,43 +82,43 @@ class rentalService {
     const endDate = query.end_date as string;
     const search = query.search as string | undefined;
 
-    const baseQuery = db('rentals');
+    const baseQuery = db("rentals");
 
     // filters
     if (vehicleId) {
-      baseQuery.where('vehicle_id', vehicleId);
+      baseQuery.where("vehicle_id", vehicleId);
     }
     // status filter
     if (status) {
-      baseQuery.where('status', status);
+      baseQuery.where("status", status);
     }
 
     // date range
     if (startDate && endDate) {
       baseQuery
-        .where('start_date', '<=', endDate)
-        .where('end_date', '>=', startDate);
+        .where("start_date", "<=", endDate)
+        .where("end_date", ">=", startDate);
     } else if (startDate) {
-      baseQuery.where('end_date', '>=', startDate);
+      baseQuery.where("end_date", ">=", startDate);
     } else if (endDate) {
-      baseQuery.where('start_date', '<=', endDate);
+      baseQuery.where("start_date", "<=", endDate);
     }
     // search by name and phone number
     if (search) {
       baseQuery.where((builder) => {
-        builder.whereILike('customer_name', `%${search}%`);
-        builder.orWhereILike('customer_phone', `%${search}%`);
+        builder.whereILike("customer_name", `%${search}%`);
+        builder.orWhereILike("customer_phone", `%${search}%`);
       });
     }
     const [{ count }] = await baseQuery
       .clone()
       .clearSelect()
-      .count('* as count');
+      .count("* as count");
 
     const rentals = await baseQuery
       .clone()
-      .select('*')
-      .orderBy('created_at', 'desc')
+      .select("*")
+      .orderBy("created_at", "desc")
       .limit(limit)
       .offset(offset);
 
@@ -134,7 +134,7 @@ class rentalService {
   };
 
   getRentalById = async (id: string) => {
-    const result = await db('rentals')
+    const result = await db("rentals")
       .where({
         id: id,
       })
@@ -153,12 +153,12 @@ class rentalService {
     body: UpdateRentalInput;
   }) => {
     const rentalId = Number(id);
-    console.log(id, 'raw id', rentalId, 'RentalId');
+    console.log(id, "raw id", rentalId, "RentalId");
 
-    const existingRental = await db('rentals').where({ id: rentalId }).first();
+    const existingRental = await db("rentals").where({ id: rentalId }).first();
 
     if (!existingRental) {
-      throw new AppError(status.NOT_FOUND, 'Rental not found');
+      throw new AppError(status.NOT_FOUND, "Rental not found");
     }
 
     const vehicleId = body.vehicle_id ?? existingRental.vehicle_id;
@@ -169,26 +169,26 @@ class rentalService {
     if (new Date(startDate) > new Date(endDate)) {
       throw new AppError(
         status.BAD_REQUEST,
-        'Start date cannot be after end date',
+        "Start date cannot be after end date",
       );
     }
 
     // 4. Check rental overlap
-    const overlappingRental = await db('rentals')
-      .where('vehicle_id', vehicleId)
-      .where('id', '!=', rentalId)
-      .whereIn('status', ['booked', 'ongoing'])
-      .where('start_date', '<=', endDate)
-      .where('end_date', '>=', startDate)
+    const overlappingRental = await db("rentals")
+      .where("vehicle_id", vehicleId)
+      .where("id", "!=", rentalId)
+      .whereIn("status", ["booked", "ongoing"])
+      .where("start_date", "<=", endDate)
+      .where("end_date", ">=", startDate)
       .first();
 
     if (overlappingRental) {
       throw new AppError(
         status.CONFLICT,
-        'Vehicle is already rented during this period',
+        "Vehicle is already rented during this period",
       );
     }
-    const [rentalUpdate] = await db('rentals')
+    const [rentalUpdate] = await db("rentals")
       .where({
         id: Number(id),
       })
@@ -198,53 +198,45 @@ class rentalService {
         updated_at: new Date(),
       })
       .returning([
-        'id',
-        'vehicle_id',
-        'customer_name',
-        'customer_phone',
-        'start_date',
-        'end_date',
-        'total_amount',
-        'status',
-        'created_at',
-        'updated_at',
+        "id",
+        "vehicle_id",
+        "customer_name",
+        "customer_phone",
+        "start_date",
+        "end_date",
+        "total_amount",
+        "status",
+        "created_at",
+        "updated_at",
       ]);
     if (!rentalUpdate) {
-      throw new AppError(status.NOT_FOUND, 'Rental update failed');
+      throw new AppError(status.NOT_FOUND, "Rental update failed");
     }
     return rentalUpdate;
   };
   // delete rentals
   deleteRentals = async (id: string) => {
-    const [deleteRental] = await db('rentals')
+    const [deleteRental] = await db("rentals")
       .where({ id: Number(id) })
       .del()
       .returning([
-        'id',
-        'vehicle_id',
-        'customer_name',
-        'customer_phone',
-        'start_date',
-        'end_date',
-        'total_amount',
-        'status',
-        'created_at',
-        'updated_at',
+        "id",
+        "vehicle_id",
+        "customer_name",
+        "customer_phone",
+        "start_date",
+        "end_date",
+        "total_amount",
+        "status",
+        "created_at",
+        "updated_at",
       ]);
 
     if (!deleteRental) {
-      throw new AppError(status.NOT_FOUND, 'Failed to delete rental');
+      throw new AppError(status.NOT_FOUND, "Failed to delete rental");
     }
     return deleteRental;
   };
 }
 
 export const RentalService = new rentalService();
-
-// export const RentalServices = {
-//   getAllRentals,
-//   getRentalById,
-//   createRental,
-//   updateRentals,
-//   deleteRentals,
-// };

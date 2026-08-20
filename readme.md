@@ -109,7 +109,7 @@ npm can also be used if preferred.
 ## 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/ashiful2002/vehicle-rental-backend
 
 cd vehicle-rental-backend
 ```
@@ -223,7 +223,7 @@ Verify Email & Password
         ↓
 Generate JWT
         ↓
-Authorization: Bearer <token>
+Authorization: 
         ↓
 Protected API Routes
 ```
