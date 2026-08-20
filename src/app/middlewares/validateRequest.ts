@@ -1,14 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import Joi from "joi";
-import status from "http-status";
-import AppError from "../errorHelpers/AppError";
+import { Request, Response, NextFunction } from 'express';
+import Joi from 'joi';
+import status from 'http-status';
+import AppError from '../errorHelpers/AppError';
 
 export const validateRequest = (schema: Joi.ObjectSchema) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
     try {
       // If data is sent as a stringified JSON inside req.body.data, parse it
       let payload = req.body;
-      if (req.body && typeof req.body.data === "string") {
+      if (req.body && typeof req.body.data === 'string') {
         try {
           payload = JSON.parse(req.body.data);
         } catch {
@@ -24,10 +24,14 @@ export const validateRequest = (schema: Joi.ObjectSchema) => {
 
       req.body = validatedData;
       next();
-    } catch (error: any) {
-      const errorMessage = error.details
-        ? error.details.map((d: any) => d.message).join(", ")
-        : error.message;
+    } catch (error: unknown) {
+      const err = error as {
+        details?: Array<{ message: string }>;
+        message?: string;
+      };
+      const errorMessage = err.details
+        ? err.details.map((d: { message: string }) => d.message).join(', ')
+        : err.message || 'Validation failed';
 
       next(new AppError(status.BAD_REQUEST, errorMessage));
     }

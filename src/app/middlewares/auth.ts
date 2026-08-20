@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { NextFunction, Request, Response } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const auth = (req: Request, res: Response, next: NextFunction): void => {
   try {
@@ -8,7 +8,7 @@ const auth = (req: Request, res: Response, next: NextFunction): void => {
     if (!token) {
       res.status(401).json({
         success: false,
-        message: "Unauthorized access. Token not found",
+        message: 'Unauthorized access. Token not found',
       });
       return;
     }

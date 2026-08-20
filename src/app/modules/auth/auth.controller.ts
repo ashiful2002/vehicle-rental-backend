@@ -10,7 +10,7 @@ class AuthController {
   constructor(authService: AuthService) {
     this.authService = authService;
   }
- 
+
   // arrow function class fields keep `this` bound correctly
   // when Express calls these as plain callbacks
 

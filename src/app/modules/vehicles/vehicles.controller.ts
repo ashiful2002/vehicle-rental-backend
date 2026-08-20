@@ -1,8 +1,8 @@
-import status from "http-status";
-import { catchAsync } from "../../shared/catchAsync";
-import { sendResponse } from "../../shared/sendResponse";
-import { Request, Response } from "express";
-import { VehiclesServices } from "./vehicles.service";
+import status from 'http-status';
+import { catchAsync } from '../../shared/catchAsync';
+import { sendResponse } from '../../shared/sendResponse';
+import { Request, Response } from 'express';
+import { VehiclesServices } from './vehicles.service';
 
 class VehiclesControllerClass {
   createNewVehicle = catchAsync(async (req: Request, res: Response) => {
@@ -16,7 +16,7 @@ class VehiclesControllerClass {
     sendResponse(res, {
       httpStatusCode: status.CREATED,
       success: true,
-      message: "Vehicle created successfully",
+      message: 'Vehicle created successfully',
       data: result,
     });
   });
@@ -28,7 +28,7 @@ class VehiclesControllerClass {
     sendResponse(res, {
       httpStatusCode: status.OK,
       success: true,
-      message: "Get all vehicles successfully",
+      message: 'Get all vehicles successfully',
       meta: result.meta,
       data: result.data,
     });
@@ -41,7 +41,7 @@ class VehiclesControllerClass {
     sendResponse(res, {
       httpStatusCode: status.OK,
       success: true,
-      message: "Get vehicle by id successfully",
+      message: 'Get vehicle by id successfully',
       data: result,
     });
   });
@@ -58,7 +58,7 @@ class VehiclesControllerClass {
     sendResponse(res, {
       httpStatusCode: status.OK,
       success: true,
-      message: "Vehicle updated successfully",
+      message: 'Vehicle updated successfully',
       data: result,
     });
   });
@@ -70,7 +70,7 @@ class VehiclesControllerClass {
     sendResponse(res, {
       httpStatusCode: status.OK,
       success: true,
-      message: "Vehicle deleted successfully",
+      message: 'Vehicle deleted successfully',
       data: result,
     });
   });

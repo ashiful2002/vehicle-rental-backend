@@ -1,11 +1,11 @@
-import type { Knex } from "knex";
-import dotenv from "dotenv";
+import type { Knex } from 'knex';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 const config: Record<string, Knex.Config> = {
   development: {
-    client: "pg",
+    client: 'pg',
 
     connection: {
       connectionString: process.env.DATABASE_URL,
@@ -13,12 +13,12 @@ const config: Record<string, Knex.Config> = {
     },
 
     migrations: {
-      directory: "./src/db/migrations",
-      tableName: "knex_migrations",
+      directory: './src/db/migrations',
+      tableName: 'knex_migrations',
     },
 
     seeds: {
-      directory: "./src/db/seeds",
+      directory: './src/db/seeds',
     },
 
     pool: {
@@ -28,7 +28,7 @@ const config: Record<string, Knex.Config> = {
   },
 
   production: {
-    client: "pg",
+    client: 'pg',
 
     connection: {
       connectionString: process.env.DATABASE_URL,
@@ -38,12 +38,12 @@ const config: Record<string, Knex.Config> = {
     },
 
     migrations: {
-      directory: "./src/db/migrations",
-      tableName: "knex_migrations",
+      directory: './src/db/migrations',
+      tableName: 'knex_migrations',
     },
 
     seeds: {
-      directory: "./src/db/seeds",
+      directory: './src/db/seeds',
     },
 
     pool: {

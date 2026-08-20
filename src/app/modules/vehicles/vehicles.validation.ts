@@ -1,66 +1,60 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export const createVehicleJoiSchema = Joi.object({
   name: Joi.string().min(2).max(100).required().messages({
-    "string.min": "Vehicle name must be at least 2 characters",
-    "string.max": "Vehicle name cannot exceed 100 characters",
-    "any.required": "Vehicle name is required",
+    'string.min': 'Vehicle name must be at least 2 characters',
+    'string.max': 'Vehicle name cannot exceed 100 characters',
+    'any.required': 'Vehicle name is required',
   }),
 
   plate_number: Joi.string().min(3).max(50).required().messages({
-    "string.min": "Plate number is required",
-    "string.max": "Plate number cannot exceed 20 characters",
-    "any.required": "Plate number is required",
+    'string.min': 'Plate number is required',
+    'string.max': 'Plate number cannot exceed 20 characters',
+    'any.required': 'Plate number is required',
   }),
 
   category: Joi.string()
-    .valid("sedan", "suv", "van", "truck")
+    .valid('sedan', 'suv', 'van', 'truck')
     .required()
     .messages({
-      "any.only": "Category must be sedan, suv, van, or truck",
-      "any.required": "Category is required",
+      'any.only': 'Category must be sedan, suv, van, or truck',
+      'any.required': 'Category is required',
     }),
 
   daily_rate: Joi.number().positive().required().messages({
-    "number.base": "Daily rate must be a number",
-    "number.positive": "Daily rate must be greater than 0",
-    "any.required": "Daily rate is required",
+    'number.base': 'Daily rate must be a number',
+    'number.positive': 'Daily rate must be greater than 0',
+    'any.required': 'Daily rate is required',
   }),
 
   photo_path: Joi.string().allow(null).optional(),
 });
 
-
 export const updateVehicleJoiSchema = Joi.object({
   name: Joi.string().min(2).max(100).optional().messages({
-    "string.min": "Vehicle name must be at least 2 characters",
-    "string.max": "Vehicle name cannot exceed 100 characters",
+    'string.min': 'Vehicle name must be at least 2 characters',
+    'string.max': 'Vehicle name cannot exceed 100 characters',
   }),
 
   plate_number: Joi.string().min(3).max(20).optional().messages({
-    "string.min": "Plate number must be at least 3 characters",
-    "string.max": "Plate number cannot exceed 20 characters",
+    'string.min': 'Plate number must be at least 3 characters',
+    'string.max': 'Plate number cannot exceed 20 characters',
   }),
 
   category: Joi.string()
-    .valid("sedan", "suv", "van", "truck")
+    .valid('sedan', 'suv', 'van', 'truck')
     .optional()
     .messages({
-      "any.only": "Category must be sedan, suv, van, or truck",
+      'any.only': 'Category must be sedan, suv, van, or truck',
     }),
 
   daily_rate: Joi.number().positive().optional().messages({
-    "number.base": "Daily rate must be a number",
-    "number.positive": "Daily rate must be greater than 0",
+    'number.base': 'Daily rate must be a number',
+    'number.positive': 'Daily rate must be greater than 0',
   }),
 
-  photo_path: Joi.string().allow(null, "").optional(),
+  photo_path: Joi.string().allow(null, '').optional(),
 }).min(1); // Ensures at least one field is provided for update
-
-
-
-
-
 
 // import { z } from 'zod';
 

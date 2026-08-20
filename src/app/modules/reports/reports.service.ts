@@ -1,8 +1,8 @@
-import { Knex } from "knex";
-import status from "http-status";
+import { Knex } from 'knex';
+import status from 'http-status';
 
-import AppError from "../../errorHelpers/AppError";
-import { RentalReportResult, VehicleReport } from "./reports.interface";
+import AppError from '../../errorHelpers/AppError';
+import { RentalReportResult, VehicleReport } from './reports.interface';
 
 class ReportService {
   private db: Knex;
@@ -13,7 +13,7 @@ class ReportService {
 
   private validateMonth(month: string): void {
     if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
-      throw new AppError(status.BAD_REQUEST, "month must be in YYYY-MM format");
+      throw new AppError(status.BAD_REQUEST, 'month must be in YYYY-MM format');
     }
   }
 
@@ -22,7 +22,7 @@ class ReportService {
     monthEnd: string;
   } {
     const monthStart = `${month}-01`;
-    const [year, m] = month.split("-").map(Number);
+    const [year, m] = month.split('-').map(Number);
     // day 0 of next month = last day of this month
     const monthEnd = new Date(year, m, 0).toISOString().slice(0, 10);
     return { monthStart, monthEnd };
@@ -35,7 +35,7 @@ class ReportService {
     this.validateMonth(month);
     const { monthStart, monthEnd } = this.getMonthBoundaries(month);
 
-    let vehicleFilter = "";
+    let vehicleFilter = '';
 
     const bindings: (string | number)[] = [
       monthEnd,
@@ -47,7 +47,7 @@ class ReportService {
     ];
 
     if (vehicleId) {
-      vehicleFilter = "AND r.vehicle_id = ?";
+      vehicleFilter = 'AND r.vehicle_id = ?';
       bindings.push(vehicleId);
     }
 
@@ -70,13 +70,15 @@ class ReportService {
 
     const result = await this.db.raw(sql, bindings);
 
-    const vehicles: VehicleReport[] = result.rows.map((row: any) => ({
-      id: row.id,
-      name: row.name,
-      total_bookings: row.total_bookings,
-      days_rented: row.days_rented,
-      revenue: Number(row.revenue),
-    }));
+    const vehicles: VehicleReport[] = result.rows.map(
+      (row: Record<string, unknown>) => ({
+        id: Number(row.id),
+        name: String(row.name),
+        total_bookings: Number(row.total_bookings),
+        days_rented: Number(row.days_rented),
+        revenue: Number(row.revenue),
+      }),
+    );
 
     const topVehicle = vehicles.length > 0 ? vehicles[0] : null;
 

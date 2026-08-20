@@ -1,15 +1,14 @@
-import express from "express";
-import { RentalsController } from "./reltals.controller";
-import auth from "../../middlewares/auth";
+import express from 'express';
+import auth from '../../middlewares/auth';
+import { RentalController } from './reltals.controller';
 
 const router = express.Router();
 router.use(auth);
 
-
-router.get("/", RentalsController.getAllRentals);
-router.get("/:id", RentalsController.getRentalById);
-router.post("/", RentalsController.createRental);
-router.put("/:id", RentalsController.updateRentals);
-router.delete("/:id", RentalsController.deleteRentals);
+router.get('/', RentalController.getAllRentals);
+router.get('/:id', RentalController.getRentalById);
+router.post('/', RentalController.createRental);
+router.put('/:id', RentalController.updateRentals);
+router.delete('/:id', RentalController.deleteRentals);
 
 export const RentalRoutes = router;
